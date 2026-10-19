@@ -4,15 +4,31 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     flake-utils.url = "github:numtide/flake-utils";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    { nixpkgs, flake-utils, ... }:
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      treefmt-nix,
+      ...
+    }:
     flake-utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         inherit (pkgs) lib;
+
+        treefmtEval = treefmt-nix.lib.evalModule pkgs {
+          projectRootFile = "flake.nix";
+          programs.nixfmt.enable = true;
+          programs.clang-format.enable = true;
+        };
 
         freeimage-for-es-de = pkgs.stdenv.mkDerivation (finalAttrs: {
           pname = "freeimage-for-es-de";
@@ -99,12 +115,15 @@
 
       in
       {
+        formatter = treefmtEval.config.build.wrapper;
+
         packages = {
           inherit freeimage-for-es-de;
           default = freeimage-for-es-de;
         };
 
         checks = {
+          formatting = treefmtEval.config.build.check self;
           smoke = check "smoke" ./tests/smoke.cpp;
           link-all = check "link_all" ./tests/link_all.cpp;
           esde-surface = check "esde_surface" ./tests/esde_surface.cpp;
