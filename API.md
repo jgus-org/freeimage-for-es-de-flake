@@ -20,114 +20,123 @@ section headings below name the translation unit that holds the implementation e
 entry delegates to.
 
 ### Init / version / messages — answered in `src/FreeImage.cpp` itself
-| Symbol | Signature | classic 3.18.0 |
-| --- | --- | --- |
-| `FreeImage_Initialise` | `void (BOOL load_local_plugins_only = FALSE)` | 790 |
-| `FreeImage_DeInitialise` | `void (void)` |  |
-| `FreeImage_GetVersion` | `const char* (void)` — returns `"3.18.0"` | 795 |
-| `FreeImage_GetCopyrightMessage` | `const char* (void)` | 796 |
-| `FreeImage_SetOutputMessage` | `void (FreeImage_OutputMessageFunction omf)` |  |
-| `FreeImage_SetOutputMessageStdCall` | `void (FreeImage_OutputMessageFunctionStdCall omf)` |  |
-| `FreeImage_OutputMessageProc` | `void (int fif, const char* fmt, ...)` |  |
+
+| Symbol                              | Signature                                           | classic 3.18.0 |
+| ----------------------------------- | --------------------------------------------------- | -------------- |
+| `FreeImage_Initialise`              | `void (BOOL load_local_plugins_only = FALSE)`       | 790            |
+| `FreeImage_DeInitialise`            | `void (void)`                                       |                |
+| `FreeImage_GetVersion`              | `const char* (void)` — returns `"3.18.0"`           | 795            |
+| `FreeImage_GetCopyrightMessage`     | `const char* (void)`                                | 796            |
+| `FreeImage_SetOutputMessage`        | `void (FreeImage_OutputMessageFunction omf)`        |                |
+| `FreeImage_SetOutputMessageStdCall` | `void (FreeImage_OutputMessageFunctionStdCall omf)` |                |
+| `FreeImage_OutputMessageProc`       | `void (int fif, const char* fmt, ...)`              |                |
 
 Self-init: the shared build needs no runtime init (the registry is a compile-time
 table). `Initialise`/`DeInitialise` are harmless no-ops (ES-DE calls them only under
 `FREEIMAGE_LIB`, which ES-DE never defines).
 
 ### Load / save / unload dispatch — `src/registry.cpp` + `src/io.cpp`
-| Symbol | Signature | classic 3.18.0 |
-| --- | --- | --- |
-| `FreeImage_Unload` | `void (FIBITMAP* dib)` | 812 |
-| `FreeImage_Load` | `FIBITMAP* (FREE_IMAGE_FORMAT fif, const char* filename, int flags = 0)` |  |
-| `FreeImage_LoadU` | `FIBITMAP* (FREE_IMAGE_FORMAT, const wchar_t* filename, int flags = 0)` — POSIX narrow conversion |  |
-| `FreeImage_LoadFromHandle` | `FIBITMAP* (FREE_IMAGE_FORMAT, FreeImageIO* io, fi_handle handle, int flags = 0)` | 821 |
-| `FreeImage_Save` | `BOOL (FREE_IMAGE_FORMAT, FIBITMAP* dib, const char* filename, int flags = 0)` — `w+b` truncates |  |
-| `FreeImage_SaveU` | `BOOL (FREE_IMAGE_FORMAT, FIBITMAP*, const wchar_t* filename, int flags = 0)` |  |
-| `FreeImage_SaveToHandle` | `BOOL (FREE_IMAGE_FORMAT, FIBITMAP*, FreeImageIO*, fi_handle, int flags = 0)` | 824 |
+
+| Symbol                     | Signature                                                                                         | classic 3.18.0 |
+| -------------------------- | ------------------------------------------------------------------------------------------------- | -------------- |
+| `FreeImage_Unload`         | `void (FIBITMAP* dib)`                                                                            | 812            |
+| `FreeImage_Load`           | `FIBITMAP* (FREE_IMAGE_FORMAT fif, const char* filename, int flags = 0)`                          |                |
+| `FreeImage_LoadU`          | `FIBITMAP* (FREE_IMAGE_FORMAT, const wchar_t* filename, int flags = 0)` — POSIX narrow conversion |                |
+| `FreeImage_LoadFromHandle` | `FIBITMAP* (FREE_IMAGE_FORMAT, FreeImageIO* io, fi_handle handle, int flags = 0)`                 | 821            |
+| `FreeImage_Save`           | `BOOL (FREE_IMAGE_FORMAT, FIBITMAP* dib, const char* filename, int flags = 0)` — `w+b` truncates  |                |
+| `FreeImage_SaveU`          | `BOOL (FREE_IMAGE_FORMAT, FIBITMAP*, const wchar_t* filename, int flags = 0)`                     |                |
+| `FreeImage_SaveToHandle`   | `BOOL (FREE_IMAGE_FORMAT, FIBITMAP*, FreeImageIO*, fi_handle, int flags = 0)`                     | 824            |
 
 ### Memory I/O — `src/io.cpp`
-| Symbol | Signature | classic 3.18.0 |
-| --- | --- | --- |
-| `FreeImage_OpenMemory` | `FIMEMORY* (BYTE* data = 0, DWORD size_in_bytes = 0)` — wraps, no copy | 828 |
-| `FreeImage_CloseMemory` | `void (FIMEMORY* stream)` |  |
-| `FreeImage_LoadFromMemory` | `FIBITMAP* (FREE_IMAGE_FORMAT, FIMEMORY* stream, int flags = 0)` |  |
-| `FreeImage_SaveToMemory` | `BOOL (FREE_IMAGE_FORMAT, FIBITMAP*, FIMEMORY* stream, int flags = 0)` |  |
-| `FreeImage_TellMemory` | `long (FIMEMORY* stream)` |  |
-| `FreeImage_SeekMemory` | `BOOL (FIMEMORY* stream, long offset, int origin)` |  |
-| `FreeImage_AcquireMemory` | `BOOL (FIMEMORY* stream, BYTE** data, DWORD* size_in_bytes)` |  |
-| `FreeImage_ReadMemory` | `unsigned (void* buffer, unsigned size, unsigned count, FIMEMORY*)` |  |
-| `FreeImage_WriteMemory` | `unsigned (const void* buffer, unsigned size, unsigned count, FIMEMORY*)` |  |
+
+| Symbol                     | Signature                                                                 | classic 3.18.0 |
+| -------------------------- | ------------------------------------------------------------------------- | -------------- |
+| `FreeImage_OpenMemory`     | `FIMEMORY* (BYTE* data = 0, DWORD size_in_bytes = 0)` — wraps, no copy    | 828            |
+| `FreeImage_CloseMemory`    | `void (FIMEMORY* stream)`                                                 |                |
+| `FreeImage_LoadFromMemory` | `FIBITMAP* (FREE_IMAGE_FORMAT, FIMEMORY* stream, int flags = 0)`          |                |
+| `FreeImage_SaveToMemory`   | `BOOL (FREE_IMAGE_FORMAT, FIBITMAP*, FIMEMORY* stream, int flags = 0)`    |                |
+| `FreeImage_TellMemory`     | `long (FIMEMORY* stream)`                                                 |                |
+| `FreeImage_SeekMemory`     | `BOOL (FIMEMORY* stream, long offset, int origin)`                        |                |
+| `FreeImage_AcquireMemory`  | `BOOL (FIMEMORY* stream, BYTE** data, DWORD* size_in_bytes)`              |                |
+| `FreeImage_ReadMemory`     | `unsigned (void* buffer, unsigned size, unsigned count, FIMEMORY*)`       |                |
+| `FreeImage_WriteMemory`    | `unsigned (const void* buffer, unsigned size, unsigned count, FIMEMORY*)` |                |
 
 The `FreeImageIO` used by the `*FromMemory` entry points takes the `FIMEMORY*` itself
 as its `fi_handle` (classic convention). `CloseMemory` never frees a wrapped
 (caller-owned) buffer.
 
 ### File-type / format queries — `src/registry.cpp`
-| Symbol | Signature | classic 3.18.0 |
-| --- | --- | --- |
-| `FreeImage_GetFileType` | `FREE_IMAGE_FORMAT (const char* filename, int size = 0)` — iterate registry ascending; not-found ⇒ `FIF_UNKNOWN` |  |
-| `FreeImage_GetFileTypeU` | `FREE_IMAGE_FORMAT (const wchar_t* filename, int size = 0)` — returns `FIF_UNKNOWN` on POSIX | 882 |
-| `FreeImage_GetFileTypeFromMemory` | `FREE_IMAGE_FORMAT (FIMEMORY* stream, int size = 0)` — leaves stream at 0 |  |
-| `FreeImage_GetFIFFromFilename` | `FREE_IMAGE_FORMAT (const char* filename)` — extension table over the five |  |
-| `FreeImage_GetFIFFromFilenameU` | `FREE_IMAGE_FORMAT (const wchar_t* filename)` |  |
-| `FreeImage_FIFSupportsReading` | `BOOL (FREE_IMAGE_FORMAT fif)` — TRUE iff a registered plugin has `load` |  |
-| `FreeImage_FIFSupportsWriting` | `BOOL (FREE_IMAGE_FORMAT fif)` — TRUE iff registered plugin has `save` |  |
+
+| Symbol                            | Signature                                                                                                        | classic 3.18.0 |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------- |
+| `FreeImage_GetFileType`           | `FREE_IMAGE_FORMAT (const char* filename, int size = 0)` — iterate registry ascending; not-found ⇒ `FIF_UNKNOWN` |                |
+| `FreeImage_GetFileTypeU`          | `FREE_IMAGE_FORMAT (const wchar_t* filename, int size = 0)` — returns `FIF_UNKNOWN` on POSIX                     | 882            |
+| `FreeImage_GetFileTypeFromMemory` | `FREE_IMAGE_FORMAT (FIMEMORY* stream, int size = 0)` — leaves stream at 0                                        |                |
+| `FreeImage_GetFIFFromFilename`    | `FREE_IMAGE_FORMAT (const char* filename)` — extension table over the five                                       |                |
+| `FreeImage_GetFIFFromFilenameU`   | `FREE_IMAGE_FORMAT (const wchar_t* filename)`                                                                    |                |
+| `FreeImage_FIFSupportsReading`    | `BOOL (FREE_IMAGE_FORMAT fif)` — TRUE iff a registered plugin has `load`                                         |                |
+| `FreeImage_FIFSupportsWriting`    | `BOOL (FREE_IMAGE_FORMAT fif)` — TRUE iff registered plugin has `save`                                           |                |
 
 `validate` must leave the stream position at 0; `GetFileType*` seek back to 0 before
 each validate and after the scan (ES-DE loads immediately after detection).
 
 ### Multi-page — `src/multipage.cpp`
-| Symbol | Signature |
-| --- | --- |
-| `FreeImage_OpenMultiBitmap` | `FIMULTIBITMAP* (FREE_IMAGE_FORMAT, const char* filename, BOOL create_new, BOOL read_only, BOOL keep_cache_in_memory = FALSE, int flags = 0)` — may return NULL |
-| `FreeImage_OpenMultiBitmapFromHandle` | `FIMULTIBITMAP* (FREE_IMAGE_FORMAT, FreeImageIO* io, fi_handle handle, int flags = 0)` |
-| `FreeImage_CloseMultiBitmap` | `BOOL (FIMULTIBITMAP* bitmap, int flags = 0)` |
-| `FreeImage_GetPageCount` | `int (FIMULTIBITMAP* bitmap)` |
-| `FreeImage_LockPage` | `FIBITMAP* (FIMULTIBITMAP* bitmap, int page)` — re-decodes each lock, no cache |
-| `FreeImage_UnlockPage` | `void (FIMULTIBITMAP* bitmap, FIBITMAP* data, BOOL changed)` |
+
+| Symbol                                | Signature                                                                                                                                                       |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FreeImage_OpenMultiBitmap`           | `FIMULTIBITMAP* (FREE_IMAGE_FORMAT, const char* filename, BOOL create_new, BOOL read_only, BOOL keep_cache_in_memory = FALSE, int flags = 0)` — may return NULL |
+| `FreeImage_OpenMultiBitmapFromHandle` | `FIMULTIBITMAP* (FREE_IMAGE_FORMAT, FreeImageIO* io, fi_handle handle, int flags = 0)`                                                                          |
+| `FreeImage_CloseMultiBitmap`          | `BOOL (FIMULTIBITMAP* bitmap, int flags = 0)`                                                                                                                   |
+| `FreeImage_GetPageCount`              | `int (FIMULTIBITMAP* bitmap)`                                                                                                                                   |
+| `FreeImage_LockPage`                  | `FIBITMAP* (FIMULTIBITMAP* bitmap, int page)` — re-decodes each lock, no cache                                                                                  |
+| `FreeImage_UnlockPage`                | `void (FIMULTIBITMAP* bitmap, FIBITMAP* data, BOOL changed)`                                                                                                    |
 
 Handle-opened multibitmaps never close the caller's `FILE*`. `GIF_PLAYBACK` hands back a composited full-canvas 32bpp page carrying that frame's delay as a `FIMD_ANIMATION` `FrameTime` tag.
 
 ### Bitmap info / pixels / bits — `src/dib.cpp` (accessors inline in `dib.h`), pixel ops in `src/convert.cpp`
-| Symbol | Signature | classic 3.18.0 |
-| --- | --- | --- |
-| `FreeImage_GetImageType` | `FREE_IMAGE_TYPE (FIBITMAP* dib)` | 894 |
-| `FreeImage_GetBits` | `BYTE* (FIBITMAP* dib)` | 904 |
-| `FreeImage_GetScanLine` | `BYTE* (FIBITMAP* dib, int scanline)` — scanline 0 == visual BOTTOM | 905 |
-| `FreeImage_GetPixelIndex` | `BOOL (FIBITMAP*, unsigned x, unsigned y, BYTE* value)` |  |
-| `FreeImage_GetPixelColor` | `BOOL (FIBITMAP*, unsigned x, unsigned y, RGBQUAD* value)` |  |
-| `FreeImage_SetPixelIndex` | `BOOL (FIBITMAP*, unsigned x, unsigned y, BYTE* value)` |  |
-| `FreeImage_SetPixelColor` | `BOOL (FIBITMAP*, unsigned x, unsigned y, RGBQUAD* value)` |  |
-| `FreeImage_GetBPP` | `unsigned (FIBITMAP* dib)` | 915 |
-| `FreeImage_GetWidth` | `unsigned (FIBITMAP* dib)` | 916 |
-| `FreeImage_GetHeight` | `unsigned (FIBITMAP* dib)` | 917 |
-| `FreeImage_GetLine` | `unsigned (FIBITMAP* dib)` | 918 |
-| `FreeImage_GetPitch` | `unsigned (FIBITMAP* dib)` | 919 |
+
+| Symbol                    | Signature                                                           | classic 3.18.0 |
+| ------------------------- | ------------------------------------------------------------------- | -------------- |
+| `FreeImage_GetImageType`  | `FREE_IMAGE_TYPE (FIBITMAP* dib)`                                   | 894            |
+| `FreeImage_GetBits`       | `BYTE* (FIBITMAP* dib)`                                             | 904            |
+| `FreeImage_GetScanLine`   | `BYTE* (FIBITMAP* dib, int scanline)` — scanline 0 == visual BOTTOM | 905            |
+| `FreeImage_GetPixelIndex` | `BOOL (FIBITMAP*, unsigned x, unsigned y, BYTE* value)`             |                |
+| `FreeImage_GetPixelColor` | `BOOL (FIBITMAP*, unsigned x, unsigned y, RGBQUAD* value)`          |                |
+| `FreeImage_SetPixelIndex` | `BOOL (FIBITMAP*, unsigned x, unsigned y, BYTE* value)`             |                |
+| `FreeImage_SetPixelColor` | `BOOL (FIBITMAP*, unsigned x, unsigned y, RGBQUAD* value)`          |                |
+| `FreeImage_GetBPP`        | `unsigned (FIBITMAP* dib)`                                          | 915            |
+| `FreeImage_GetWidth`      | `unsigned (FIBITMAP* dib)`                                          | 916            |
+| `FreeImage_GetHeight`     | `unsigned (FIBITMAP* dib)`                                          | 917            |
+| `FreeImage_GetLine`       | `unsigned (FIBITMAP* dib)`                                          | 918            |
+| `FreeImage_GetPitch`      | `unsigned (FIBITMAP* dib)`                                          | 919            |
 
 All `FIBITMAP*` parameters are **non-const** (classic spelling); ES-DE passes
 non-const pointers.
 
 ### Conversion / raw bits — `src/convert.cpp`
-| Symbol | Signature |
-| --- | --- |
-| `FreeImage_ConvertTo24Bits` | `FIBITMAP* (FIBITMAP* dib)` — alpha discarded |
-| `FreeImage_ConvertTo32Bits` | `FIBITMAP* (FIBITMAP* dib)` — 32bpp ⇒ clone; indexed+transparency ⇒ alpha from table; else 0xFF |
-| `FreeImage_ConvertFromRawBits` | `FIBITMAP* (BYTE* bits, int width, int height, int pitch, unsigned bpp, unsigned r, unsigned g, unsigned b, BOOL topdown = FALSE)` — copies input |
-| `FreeImage_ConvertFromRawBitsEx` | `FIBITMAP* (BOOL copySource, BYTE* bits, FREE_IMAGE_TYPE, int w, int h, int pitch, unsigned bpp, unsigned r, unsigned g, unsigned b, BOOL topdown = FALSE)` |
-| `FreeImage_ConvertToRawBits` | `void (BYTE* bits, FIBITMAP* dib, int pitch, unsigned bpp, unsigned r, unsigned g, unsigned b, BOOL topdown = FALSE)` — masks ignored for 24/32→24/32; `topdown` flips row order only |
+
+| Symbol                           | Signature                                                                                                                                                                             |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FreeImage_ConvertTo24Bits`      | `FIBITMAP* (FIBITMAP* dib)` — alpha discarded                                                                                                                                         |
+| `FreeImage_ConvertTo32Bits`      | `FIBITMAP* (FIBITMAP* dib)` — 32bpp ⇒ clone; indexed+transparency ⇒ alpha from table; else 0xFF                                                                                       |
+| `FreeImage_ConvertFromRawBits`   | `FIBITMAP* (BYTE* bits, int width, int height, int pitch, unsigned bpp, unsigned r, unsigned g, unsigned b, BOOL topdown = FALSE)` — copies input                                     |
+| `FreeImage_ConvertFromRawBitsEx` | `FIBITMAP* (BOOL copySource, BYTE* bits, FREE_IMAGE_TYPE, int w, int h, int pitch, unsigned bpp, unsigned r, unsigned g, unsigned b, BOOL topdown = FALSE)`                           |
+| `FreeImage_ConvertToRawBits`     | `void (BYTE* bits, FIBITMAP* dib, int pitch, unsigned bpp, unsigned r, unsigned g, unsigned b, BOOL topdown = FALSE)` — masks ignored for 24/32→24/32; `topdown` flips row order only |
 
 ### Toolkit — `src/resample.cpp` / `src/convert.cpp`
-| Symbol | Signature | classic 3.18.0 |
-| --- | --- | --- |
-| `FreeImage_Rescale` | `FIBITMAP* (FIBITMAP* dib, int dst_width, int dst_height, FREE_IMAGE_FILTER filter = FILTER_CATMULLROM)` — `src/resample.cpp` | 1113 |
-| `FreeImage_PreMultiplyWithAlpha` | `BOOL (FIBITMAP* dib)` — 32bpp FIT_BITMAP only, in place; `src/convert.cpp` |  |
+
+| Symbol                           | Signature                                                                                                                     | classic 3.18.0 |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `FreeImage_Rescale`              | `FIBITMAP* (FIBITMAP* dib, int dst_width, int dst_height, FREE_IMAGE_FILTER filter = FILTER_CATMULLROM)` — `src/resample.cpp` | 1113           |
+| `FreeImage_PreMultiplyWithAlpha` | `BOOL (FIBITMAP* dib)` — 32bpp FIT_BITMAP only, in place; `src/convert.cpp`                                                   |                |
 
 ### Metadata — tag storage in `src/dib.cpp`, lookups in `src/FreeImage.cpp`
-| Symbol | Signature | classic 3.18.0 |
-| --- | --- | --- |
-| `FreeImage_GetTagCount` | `DWORD (FITAG* tag)` | 1059 |
-| `FreeImage_GetTagValue` | `const void* (FITAG* tag)` |  |
-| `FreeImage_GetMetadata` | `BOOL (FREE_IMAGE_MDMODEL model, FIBITMAP* dib, const char* key, FITAG** tag)` — no allocate-on-miss; returned tag owned by the dib | 1078 |
+
+| Symbol                  | Signature                                                                                                                           | classic 3.18.0 |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `FreeImage_GetTagCount` | `DWORD (FITAG* tag)`                                                                                                                | 1059           |
+| `FreeImage_GetTagValue` | `const void* (FITAG* tag)`                                                                                                          |                |
+| `FreeImage_GetMetadata` | `BOOL (FREE_IMAGE_MDMODEL model, FIBITMAP* dib, const char* key, FITAG** tag)` — no allocate-on-miss; returned tag owned by the dib | 1078           |
 
 ---
 

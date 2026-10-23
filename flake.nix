@@ -2,29 +2,30 @@
   description = "Minimal Classic-FreeImage-3-compatible shim library for ES-DE";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    flake-lib.url = "github:jgus-org/flake-lib/v1";
     flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
   };
 
   outputs =
-    { nixpkgs, flake-utils, ... }:
+    {
+      self,
+      flake-lib,
+      flake-utils,
+      nixpkgs,
+      ...
+    }:
     flake-utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         inherit (pkgs) lib;
 
+        orgFormatting = flake-lib.lib.mkFormatting {
+          inherit self system;
+        };
+
         freeimage-for-es-de = pkgs.stdenv.mkDerivation (finalAttrs: {
-          pname = "freeimage-for-es-de";
-          version = "3.18.0";
-
-          src = ./.;
-
-          nativeBuildInputs = [
-            pkgs.cmake
-            pkgs.pkg-config
-          ];
-
           # Codec backends resolved through nixpkgs (verified on nixos-26.05).
           buildInputs = [
             pkgs.zlib
@@ -33,7 +34,16 @@
             pkgs.giflib
             pkgs.libwebp
           ];
-
+          meta = {
+            description = "Minimal Classic-FreeImage-3-compatible shim library for ES-DE";
+            license = lib.licenses.mit;
+            platforms = lib.platforms.linux;
+          };
+          nativeBuildInputs = [
+            pkgs.cmake
+            pkgs.pkg-config
+          ];
+          pname = "freeimage-for-es-de";
           postInstall = ''
             install -Dm644 ${./freeimage.pc.in} $out/lib/pkgconfig/freeimage.pc
             substituteInPlace $out/lib/pkgconfig/freeimage.pc \
@@ -41,12 +51,8 @@
               --replace-fail '@version@' "${finalAttrs.version}"
             install -Dm644 ${./LICENSE} $out/share/licenses/freeimage-for-es-de/LICENSE
           '';
-
-          meta = {
-            description = "Minimal Classic-FreeImage-3-compatible shim library for ES-DE";
-            license = lib.licenses.mit;
-            platforms = lib.platforms.linux;
-          };
+          src = ./.;
+          version = "3.18.0";
         });
 
         # The doctest suite is opt-in in CMakeLists (FREEIMAGE_FOR_ES_DE_TESTS), so the
@@ -55,22 +61,13 @@
         # it needs the library's own dependencies plus doctest. The `check` target runs
         # the binary, making the suite green a build-time requirement of this output.
         unit-tests = pkgs.stdenv.mkDerivation {
-          pname = "freeimage-for-es-de-tests";
-          version = freeimage-for-es-de.version;
-
-          inherit (freeimage-for-es-de) src buildInputs;
-
-          nativeBuildInputs = freeimage-for-es-de.nativeBuildInputs ++ [ pkgs.doctest ];
-
-          cmakeFlags = [ "-DFREEIMAGE_FOR_ES_DE_TESTS=ON" ];
-
+          inherit (freeimage-for-es-de) buildInputs src;
           # The shared library is not what the suite exercises, so build only the test
           # binary; the check target depends on it and runs it in place.
           buildFlags = [ "freeimage-for-es-de-tests" ];
-
-          doCheck = true;
           checkTarget = "check";
-
+          cmakeFlags = [ "-DFREEIMAGE_FOR_ES_DE_TESTS=ON" ];
+          doCheck = true;
           # The cmake hook configures in a `build` subdirectory; the install phase's
           # working directory is the hook's, not necessarily the source root.
           installPhase = ''
@@ -79,6 +76,9 @@
             install -m755 "$(find . -type f -name freeimage-for-es-de-tests)" $out/bin/
             runHook postInstall
           '';
+          nativeBuildInputs = freeimage-for-es-de.nativeBuildInputs ++ [ pkgs.doctest ];
+          pname = "freeimage-for-es-de-tests";
+          version = freeimage-for-es-de.version;
         };
 
         check =
@@ -99,16 +99,17 @@
 
       in
       {
+        checks = {
+          esde-surface = check "esde_surface" ./tests/esde_surface.cpp;
+          formatting = orgFormatting.check;
+          link-all = check "link_all" ./tests/link_all.cpp;
+          smoke = check "smoke" ./tests/smoke.cpp;
+          unit = unit-tests;
+        };
+        formatter = orgFormatting.formatter;
         packages = {
           inherit freeimage-for-es-de;
           default = freeimage-for-es-de;
-        };
-
-        checks = {
-          smoke = check "smoke" ./tests/smoke.cpp;
-          link-all = check "link_all" ./tests/link_all.cpp;
-          esde-surface = check "esde_surface" ./tests/esde_surface.cpp;
-          unit = unit-tests;
         };
       }
     );

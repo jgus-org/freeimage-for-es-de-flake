@@ -12,12 +12,12 @@ constant values for source compatibility.
 
 ## Outputs
 
-| Output | Contents |
-| --- | --- |
-| `packages.<system>.freeimage-for-es-de` | The library, its `FreeImage.h`, and the `freeimage` pkg-config module |
-| `packages.<system>.default` | The same package |
-| `checks.<system>.smoke`, `.link-all`, `.esde-surface` | Consumer translation units compiled against the *installed* package and run, so the shipped headers, module and soname are proven from the outside |
-| `checks.<system>.unit` | The doctest suite, built from the same sources with its CMake option on |
+| Output                                                | Contents                                                                                                                                           |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages.<system>.freeimage-for-es-de`               | The library, its `FreeImage.h`, and the `freeimage` pkg-config module                                                                              |
+| `packages.<system>.default`                           | The same package                                                                                                                                   |
+| `checks.<system>.smoke`, `.link-all`, `.esde-surface` | Consumer translation units compiled against the _installed_ package and run, so the shipped headers, module and soname are proven from the outside |
+| `checks.<system>.unit`                                | The doctest suite, built from the same sources with its CMake option on                                                                            |
 
 ## Consuming
 
@@ -56,13 +56,13 @@ it through the registry fails with the documented failure value (`nullptr` / `FA
 
 ## Supported formats
 
-| Format | fif | Read | Write |
-| --- | --- | --- | --- |
-| BMP | `FIF_BMP` | BI_RGB 1/4/8/16/24/32 bpp; BI_BITFIELDS at 16 bpp (565 or 555 from the file masks); V2–V5 headers accepted | BI_RGB 1/4/8/16/24/32 bpp, uncompressed (16 bpp written as BI_BITFIELDS) |
-| JPEG | `FIF_JPEG` | colour ⇒ 24 bpp, single component ⇒ 8 bpp with a greyscale palette; CMYK converted to RGB; DCT scale-on-load | baseline or progressive, 24 bpp, 32 bpp (alpha dropped), 8 bpp grey |
-| PNG | `FIF_PNG` | grey and palette images keep their 1/4/8 bpp indexed form (2-bit expanded, as classic); RGB ⇒ 24 bpp; RGBA, grey+alpha and RGB with `tRNS` ⇒ 32 bpp | colour type 0/2/3/6 chosen from the DIB, interlaced on request |
-| GIF | `FIF_GIF` | raw frame as 8/4/1 bpp indexed with the frame palette and a per-index transparency table; `GIF_PLAYBACK` composites to a full-canvas 32 bpp page | single frame, 1/4/8 bpp indexed only |
-| WebP | `FIF_WEBP` | 24 bpp, or 32 bpp when the bitstream carries alpha | lossy or lossless |
+| Format | fif        | Read                                                                                                                                                | Write                                                                    |
+| ------ | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| BMP    | `FIF_BMP`  | BI_RGB 1/4/8/16/24/32 bpp; BI_BITFIELDS at 16 bpp (565 or 555 from the file masks); V2–V5 headers accepted                                          | BI_RGB 1/4/8/16/24/32 bpp, uncompressed (16 bpp written as BI_BITFIELDS) |
+| JPEG   | `FIF_JPEG` | colour ⇒ 24 bpp, single component ⇒ 8 bpp with a greyscale palette; CMYK converted to RGB; DCT scale-on-load                                        | baseline or progressive, 24 bpp, 32 bpp (alpha dropped), 8 bpp grey      |
+| PNG    | `FIF_PNG`  | grey and palette images keep their 1/4/8 bpp indexed form (2-bit expanded, as classic); RGB ⇒ 24 bpp; RGBA, grey+alpha and RGB with `tRNS` ⇒ 32 bpp | colour type 0/2/3/6 chosen from the DIB, interlaced on request           |
+| GIF    | `FIF_GIF`  | raw frame as 8/4/1 bpp indexed with the frame palette and a per-index transparency table; `GIF_PLAYBACK` composites to a full-canvas 32 bpp page    | single frame, 1/4/8 bpp indexed only                                     |
+| WebP   | `FIF_WEBP` | 24 bpp, or 32 bpp when the bitstream carries alpha                                                                                                  | lossy or lossless                                                        |
 
 Beyond these, a plugin rejects the file the way classic rejects an unsupported input:
 `FreeImage_Load` returns `nullptr` and the output-message sink reports why. RLE-compressed
@@ -160,4 +160,3 @@ stay clean-room; no FreeImage source is vendored here.
 A consumer's binary links the codec backends it resolves through pkg-config — `zlib`,
 `libjpeg-turbo`, `libpng`, `giflib` and `libwebp` — each carrying its own licence. There
 is no libtiff, matching the absence of TIFF above.
-
