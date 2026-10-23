@@ -1,0 +1,9 @@
+prefix=@out@
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: FreeImage
+Description: Minimal Classic-FreeImage-3-compatible shim library
+Version: @version@
+Libs: -L${libdir} -lfreeimage
+Cflags: -I${includedir} -DFREEIMAGE_COLORORDER=0
