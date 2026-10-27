@@ -325,9 +325,7 @@ translation unit.
 
 ## 6. Notes / decisions already locked
 
-- `GetVersion()` == `"3.18.0"`; version macros `3/18/0`. MIT licensed,
-  Copyright (c) 2026 Joshua Gustafson (`LICENSE`, `meta.license`, and
-  `GetCopyrightMessage()` all carry the attribution).
+- `GetVersion()` == `"3.18.0"`; version macros `3/18/0`.
 - GIF save of non-indexed dibs returns FALSE (no auto-quantize). PNG applies classic
   `gAMA` correction on load. Shared build self-initializes.
 - Soname: built with `VERSION 3.18.0` / `SOVERSION 3` → `libfreeimage.so.3` +
