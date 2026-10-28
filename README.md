@@ -26,4 +26,5 @@ buildInputs = [ freeimage-for-es-de ];   # then: pkg-config --cflags --libs free
 - Writing is narrower than reading: GIF output is a single frame of 1/4/8-bit indexed data with no automatic quantization, so a non-indexed bitmap is rejected. RLE-compressed and OS/2 BMP data, JPEG or PNG carried inside a BMP, and bit fields at depths other than 16 bpp take the same rejection path classic uses, with the reason reported to the message sink.
 - Animated GIF playback works through the classic multi-page `FreeImageIO` path, and each frame's delay is exposed as the `FIMD_ANIMATION` `FrameTime` tag in milliseconds.
 - JPEG scale-on-load, PNG gamma and interlacing, and the GIF and WebP save options behave as the classic flags describe.
-- MIT. It is not FreeImage and contains no FreeImage source.
+
+See [LICENSE.md](LICENSE.md) for licensing and copyright, and [NOTICE.md](NOTICE.md) for the terms of upstream and distributed artifacts.

@@ -46,7 +46,7 @@
             substituteInPlace $out/lib/pkgconfig/freeimage.pc \
               --replace-fail '@out@' "$out" \
               --replace-fail '@version@' "${finalAttrs.version}"
-            install -Dm644 ${./LICENSE} $out/share/licenses/freeimage-for-es-de/LICENSE
+            install -Dm644 ${./LICENSE.md} $out/share/licenses/freeimage-for-es-de/LICENSE
           '';
           src = ./.;
           version = "3.18.0";
